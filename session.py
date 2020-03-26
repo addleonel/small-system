@@ -38,11 +38,13 @@ WELCOME
 def registration_user():
     print("REGISTRATION")
     dl = global_regis("name: ", "surname: ", "email: ", "password: ")
-    header_in_line = "ID | NAME | SURNAME | EMAIL | PASSWORD "
-    data_in_line = "{} | {} | {} | {} \n".format(dl[0],dl[1], dl[2], dl[3])
+    header_in_line = " ID | NAME | SURNAME | EMAIL | PASSWORD \n{}".format("="*40)
     if pathlib.Path("data_users.txt").exists():
+        c = count_items("data_users.txt")
+        data_in_line = " {} | {} | {} | {} | {} \n".format(c+1, dl[0],dl[1], dl[2], dl[3])
         create_item("data_users.txt",data_in_line, "a")
     else:
+        data_in_line = " {} | {} | {} | {} | {} \n".format(1, dl[0],dl[1], dl[2], dl[3])
         create_item("data_users.txt",data_in_line, "w",initial_text=header_in_line)
 #option2
 def list_user():
@@ -79,7 +81,10 @@ def view_file(path_file):
 def count_items(path_file):
 
     lt = [k for k in open(path_file)]
-    return "{}".format(len(lt)-1)
+    #print(lt)
+    c = len(lt)-2
+    return c
+
 
 def global_regis(*args):
     dl = []
@@ -91,7 +96,8 @@ def global_regis(*args):
 
 
 #registration_user()
-menu()   
+menu()
+#count_items("data_users.txt")
 #global_regis("name: ", "surname: ", "email: ", "pass: ")
 #print("amount: {}".format(count_items("data_users.txt")))
 
