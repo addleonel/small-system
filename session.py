@@ -10,9 +10,9 @@ def menu():
         if opt == 1:
             print_option("Access user option.\nType 1.<sub_option>, sub_option = 1, 2, 3, 4, 5, 6")
         elif opt == 1.1:
-            registration_user()
+            registration_user("data_users.txt")
         elif opt == 1.2:
-            list_user()
+            list_user("data_users.txt")
         elif opt == 1.3:
             print_option("option {}".format(opt))
         elif opt == 1.4:
@@ -75,26 +75,26 @@ WELCOME
 """
 
 #option 1.1
-# aplicate rawx bt
+
 @decor
-def registration_user():
+def registration_user(pf):
     print("REGISTRATION")
     dl = global_regis("name: ", "surname: ", "email: ", "password: ")
     header_in_line = " ID | NAME | SURNAME | EMAIL | PASSWORD \n{}".format("="*40)
-    if pathlib.Path("data_users.txt").exists():
-        c = count_items("data_users.txt")
+    if pathlib.Path(pf).exists():
+        c = count_items(pf)
         data_in_line = " {} | {} | {} | {} | {} \n".format(c+1, dl[0],dl[1], dl[2], dl[3])
-        create_item("data_users.txt",data_in_line, "a")
+        create_item(pf, data_in_line, "a")
     else:
         data_in_line = " {} | {} | {} | {} | {} \n".format(1, dl[0],dl[1], dl[2], dl[3])
-        create_item("data_users.txt",data_in_line, "w",initial_text=header_in_line)
+        create_item(pf, data_in_line, "w",initial_text=header_in_line)
 #option 1.2
 @decor
-def list_user():
+def list_user(pf):
     print("LIST USERS")
-    if pathlib.Path("data_users.txt").exists():
-         print("quantity: {}".format(count_items("data_users.txt")))
-         view_file("data_users.txt")
+    if pathlib.Path(pf).exists():
+         print("quantity: {}".format(count_items(pf)))
+         view_file(pf)
     else:
         print("empty list, there are not users")
 
