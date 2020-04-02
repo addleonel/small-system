@@ -17,6 +17,7 @@ def menu():
             print_option("option {}".format(opt))
         elif opt == 1.4:
             print_option("option {}".format(opt))
+            delete_user()
         elif opt == 1.5:
             print_option("option {}".format(opt))
         elif opt == 1.6:
@@ -74,8 +75,7 @@ WELCOME
 0 - EXIT
 """
 
-#option 1.1
-
+# option 1.1
 @decor
 def registration_user(pf):
     print("REGISTRATION")
@@ -87,8 +87,8 @@ def registration_user(pf):
         create_item(pf, data_in_line, "a")
     else:
         data_in_line = " {} | {} | {} | {} | {} \n".format(1, dl[0],dl[1], dl[2], dl[3])
-        create_item(pf, data_in_line, "w",initial_text=header_in_line)
-#option 1.2
+        create_item(pf, data_in_line, "w", initial_text=header_in_line)
+# option 1.2
 @decor
 def list_user(pf):
     print("LIST USERS")
@@ -98,10 +98,42 @@ def list_user(pf):
     else:
         print("empty list, there are not users")
 
-#option 2.1
+# option 1.4
+def delete_user(pf):
+    print("\033[1;34;1m DELETE USER")
+    if pathlib.Path(pf).exists():
+        delete_item(pf)
+
+
+
+
+
+# option 2.1
 def registration_product():
     print("NEW PRODUCT")
     dl = global_regis("name: ", "prize: ", "proveedor: ", "amount: ", "")
+
+# modify current
+def delete_item(path_file, the_id):
+    # c = count_items(path_file)
+    i = the_id + 1
+    lt = [k for k in open(path_file)]
+    print(lt[i])
+    question = input("delete (y, n):")
+    if question in ('y', 'yes', 'yep'):
+        if lt[i][1] == str(the_id):
+            # rawx tb
+            with open(path_file, "r") as f:
+                line = f.readline()
+                print(line)
+            #with open(path_file, "w") as f:
+            #    for li in line:
+             #       if li.strip("\n") != lt[i]:
+              #          f.write(li)
+            print("deleted")
+    elif question in ('n', 'no', 'not'):
+        pass
+        print("no changed nothing")
 
 
 def create_item(path_file, list_data, type_in, initial_text=""):
@@ -109,12 +141,12 @@ def create_item(path_file, list_data, type_in, initial_text=""):
         f = open(path_file, "w")
         f.write("{}\n{}".format(initial_text, list_data))
         f.close()
-        print("registrated")
+        print("registered")
     elif type_in == "a":
         f = open(path_file, "a")
         f.write(list_data)
         f.close()
-        print("registrated")
+        print("registered")
 
 def view_file(path_file):
     f = open(path_file, "r")
@@ -122,9 +154,8 @@ def view_file(path_file):
     f.close()
 
 def count_items(path_file):
-
     lt = [k for k in open(path_file)]
-    #print(lt)
+    # print(lt)
     c = len(lt)-2
     return c
 
@@ -137,12 +168,12 @@ def global_regis(*args):
     return dl
 
 
-
-#registration_user()
-menu()
-#count_items("data_users.txt")
-#global_regis("name: ", "surname: ", "email: ", "pass: ")
-#print("amount: {}".format(count_items("data_users.txt")))
+# registration_user()
+delete_item("data_users.txt", 2)
+# menu()
+# count_items("data_users.txt")
+# global_regis("name: ", "surname: ", "email: ", "pass: ")
+# print("amount: {}".format(count_items("data_users.txt")))
 
 
 
