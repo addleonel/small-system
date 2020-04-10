@@ -10,9 +10,9 @@ def menu():
         if opt == 1:
             print_option("Access user option.\nType 1.<sub_option>, sub_option = 1, 2, 3, 4, 5, 6")
         elif opt == 1.1:
-            registration_user("data_users.txt")
+            registration_user(".data_users.txt")
         elif opt == 1.2:
-            list_user("data_users.txt")
+            list_user(".data_users.txt")
         elif opt == 1.3:
             print_option("option {}".format(opt))
         elif opt == 1.4:
@@ -124,12 +124,14 @@ def delete_item(path_file, the_id):
         if lt[i][1] == str(the_id):
             # rawx tb
             with open(path_file, "r") as f:
-                line = f.readline()
-                print(line)
-            #with open(path_file, "w") as f:
-            #    for li in line:
-             #       if li.strip("\n") != lt[i]:
-              #          f.write(li)
+                lines = f.readlines()
+                print(lines)
+
+            with open(path_file, "w") as f:
+                for line in lines:
+                    if line.strip("\n")[1] != str(the_id):
+                        f.write(line)
+
             print("deleted")
     elif question in ('n', 'no', 'not'):
         pass
@@ -168,12 +170,13 @@ def global_regis(*args):
     return dl
 
 
-# registration_user()
-delete_item("data_users.txt", 2)
-# menu()
-# count_items("data_users.txt")
-# global_regis("name: ", "surname: ", "email: ", "pass: ")
-# print("amount: {}".format(count_items("data_users.txt")))
+if __name__ == '__main__':
+    # registration_user()
+    delete_item(".data_users.txt", 2)
+    #menu()
+    # count_items("data_users.txt")
+    # global_regis("name: ", "surname: ", "email: ", "pass: ")
+    # print("amount: {}".format(count_items("data_users.txt")))
 
 
 
