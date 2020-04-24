@@ -14,10 +14,9 @@ def menu():
         elif opt == 1.2:
             list_user(".data_users.txt")
         elif opt == 1.3:
-            print_option("option {}".format(opt))
+            search_user(".data_users.txt")
         elif opt == 1.4:
-            print_option("option {}".format(opt))
-            delete_user()
+            delete_user(".data_users.txt")
         elif opt == 1.5:
             print_option("option {}".format(opt))
         elif opt == 1.6:
@@ -97,12 +96,23 @@ def list_user(pf):
          view_file(pf)
     else:
         print("empty list, there are not users")
+# option 1.3
+def search_user(pf):
+    if pathlib.Path(pf).exists():
+        id = int(input("Type user's ID: "))
+        r = search_item(pf, id)
+        if str(id) in r:
+            print("ID: {}\nname: {}\nsurname: {}\nemail: {}\npassword: {}".format(r[0], r[1], r[2], r[3], r[4]))
+        else:
+            print(r)
 
 # option 1.4
+@decor
 def delete_user(pf):
-    print("\033[1;34;1m DELETE USER")
+    print("\033[1;34;1mDELETE USER")
     if pathlib.Path(pf).exists():
-        delete_item(pf)
+        id = int(input("Type user's ID: "))
+        delete_item(pf, id)
 
 
 
@@ -116,26 +126,46 @@ def registration_product():
 # modify current
 def delete_item(path_file, the_id):
     # c = count_items(path_file)
-    i = the_id + 1
-    lt = [k for k in open(path_file)]
-    print(lt[i])
-    question = input("delete (y, n):")
-    if question in ('y', 'yes', 'yep'):
-        if lt[i][1] == str(the_id):
-            # rawx tb
-            with open(path_file, "r") as f:
-                lines = f.readlines()
-                print(lines)
+    try:
+        i = the_id + 1
+        lt = [k for k in open(path_file)]
+        print(lt[i])
+        question = input("delete (y, n):")
+        if question in ('y', 'yes', 'yep'):
+            if lt[i][1] == str(the_id):
+                # rawx tb
+                with open(path_file, "r") as f:
+                    lines = f.readlines()
+                    print(lines)
 
-            with open(path_file, "w") as f:
-                for line in lines:
-                    if line.strip("\n")[1] != str(the_id):
-                        f.write(line)
+                with open(path_file, "w") as f:
+                    for line in lines:
+                        if line.strip("\n")[1] != str(the_id):
+                            f.write(line)
+                        else:
+                            f.write("     user deleted\n")
 
-            print("deleted")
-    elif question in ('n', 'no', 'not'):
-        pass
-        print("no changed nothing")
+                print("deleted")
+        elif question in ('n', 'no', 'not'):
+            pass
+            print("no changed nothing")
+    except:
+        print("It's not define")
+
+# search item by id
+def search_item(path_file, the_id):
+    try:
+        i = the_id + 1
+        lt = [k for k in open(path_file)]
+        if str(the_id) not in lt[i]:
+            return "This ID is deleted"
+        else:
+            e = lt[i].strip().split(' | ')
+            return e
+
+    except:
+        return "This ID is not define"
+
 
 
 def create_item(path_file, list_data, type_in, initial_text=""):
@@ -172,8 +202,10 @@ def global_regis(*args):
 
 if __name__ == '__main__':
     # registration_user()
-    delete_item(".data_users.txt", 2)
-    #menu()
+    #yourid = int(input("type the id: "))
+    #print(search_item('.data_users.txt', yourid))
+    #delete_item(".data_users.txt", yourid)
+    menu()
     # count_items("data_users.txt")
     # global_regis("name: ", "surname: ", "email: ", "pass: ")
     # print("amount: {}".format(count_items("data_users.txt")))
