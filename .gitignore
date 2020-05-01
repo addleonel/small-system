@@ -1,2 +1,4 @@
 .data_users.txt
 .recycle_users.txt
+.idea/
+__pycache__/
