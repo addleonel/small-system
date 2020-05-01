@@ -2,48 +2,53 @@
 import os
 import pathlib
 import time
+
 def menu():
     FILE_USERS = ".data_users.txt"
     opt = 1
     while opt != 0:
-        print(welcome())
-        opt = float(input("type option: "))
-        if opt == 1:
-            print_option("Access user option.\nType 1.<sub_option>, sub_option = 1, 2, 3, 4, 5, 6")
-        elif opt == 1.1:
-            registration_user(FILE_USERS)
-        elif opt == 1.2:
-            list_user(FILE_USERS)
-        elif opt == 1.3:
-            search_user(FILE_USERS)
-        elif opt == 1.4:
-            delete_user(FILE_USERS)
-        elif opt == 1.5:
-            modify_user(FILE_USERS)
-        elif opt == 1.6:
-            empty_users(FILE_USERS)
-        elif opt == 2:
-            print_option("Access product option.\nType 2.<sub_option>, sub_option = 1, 2, 3, 4, 5, 6")
-        elif opt == 2.1:
-            print_option("option {}".format(opt))
-        elif opt == 2.2:
-            print_option("option {}".format(opt))
-        elif opt == 2.3:
-            print_option("option {}".format(opt))
-        elif opt == 2.4:
-            print_option("option {}".format(opt))
-        elif opt == 2.5:
-            print_option("option {}".format(opt))
-        elif opt == 2.6:
-            print_option("option {}".format(opt))
-        elif opt == 3:
-            print_option("option {}".format(opt))
-        elif opt == 0:
-            print("thanks")
+        try:
+            print(welcome())
+            opt = float(input("type option: "))
+        except (ValueError, NameError, SyntaxError):
+            print("This value is not define, type correct option ...")
         else:
-            print("this is not in options")
-
-    print("finished")
+            if opt == 1:
+                print_option("Access user option.\nType 1.<sub_option>, sub_option = 1, 2, 3, 4, 5, 6")
+            elif opt == 1.1:
+                registration_user(FILE_USERS)
+            elif opt == 1.2:
+                list_user(FILE_USERS)
+            elif opt == 1.3:
+                search_user(FILE_USERS)
+            elif opt == 1.4:
+                delete_user(FILE_USERS)
+            elif opt == 1.5:
+                modify_user(FILE_USERS)
+            elif opt == 1.6:
+                empty_users(FILE_USERS)
+            elif opt == 2:
+                print_option("Access product option.\nType 2.<sub_option>, sub_option = 1, 2, 3, 4, 5, 6")
+            elif opt == 2.1:
+                print_option("option {}".format(opt))
+            elif opt == 2.2:
+                print_option("option {}".format(opt))
+            elif opt == 2.3:
+                print_option("option {}".format(opt))
+            elif opt == 2.4:
+                print_option("option {}".format(opt))
+            elif opt == 2.5:
+                print_option("option {}".format(opt))
+            elif opt == 2.6:
+                print_option("option {}".format(opt))
+            elif opt == 3:
+                print_option("option {}".format(opt))
+            elif opt == 0:
+                print("thanks")
+            else:
+                print("this is not in options")
+        finally:
+            print("finished")
 
 def decor(func):
     def wrap(*args, **kwargs):
@@ -91,14 +96,22 @@ def registration_user(pf):
         create_item(pf, data_in_line, "a", RECYCLE_USER_IN)
     else:
         data_in_line = " {} | {} | {} | {} | {} \n".format(1, dl[0],dl[1], dl[2], dl[3])
-        create_item(pf, data_in_line, "w", RECYCLE_USER_IN,initial_text=header_in_line)
+        create_item(pf, data_in_line, "w", RECYCLE_USER_IN, initial_text=header_in_line)
 # option 1.2
 @decor
 def list_user(pf):
     print("LIST USERS")
+    MESSAGE_USER_DELETED = "user deleted"
     if pathlib.Path(pf).exists():
-         print("quantity: {}".format(count_items(pf)))
-         view_file(pf)
+        c = 0
+        with open(pf) as f:
+            lines = f.readlines()
+            for line in lines:
+
+                if line.rstrip("\n").lstrip() == MESSAGE_USER_DELETED:
+                    c += 1
+        print("quantity: {}".format(count_items(pf)-c))
+        view_file(pf)
     else:
         print("empty list, there are not users")
 # option 1.3
@@ -106,12 +119,16 @@ def list_user(pf):
 def search_user(pf):
     print("SEARCH USERS")
     if pathlib.Path(pf).exists():
-        id = int(input("Type user's ID: "))
-        r = search_item(pf, id)
-        if str(id) in r:
-            print("ID: {}\nname: {}\nsurname: {}\nemail: {}\npassword: {}".format(r[0], r[1], r[2], r[3], r[4]))
+        try:
+            user_id = int(input("Type user's ID: "))
+        except (ValueError, NameError, SyntaxError):
+            print("This value is not define, please try again ...")
         else:
-            print(r)
+            r = search_item(pf, user_id)
+            if str(user_id) in r:
+                print("ID: {}\nname: {}\nsurname: {}\nemail: {}\npassword: {}".format(r[0], r[1], r[2], r[3], r[4]))
+            else:
+                print(r)
     else:
         print("There are not users, register one")
 
@@ -131,7 +148,7 @@ def modify_user(pf):
     print("MODIFY USERS")
     if pathlib.Path(pf).exists():
         # path_file, message, list_data, type_in, recycle_in)
-        modify_item(pf, "type the user's ID: ")
+        modify_item(pf, "type the user's ID: ", "name: ", "surname: ", "email: ", "password: ")
     else:
         print("There are not users")
 
@@ -150,7 +167,6 @@ def empty_users(pf):
             print("It's not the option, type \'y\' or \'n\'")
     else:
         print("There are not users, register one ...")
-
 
 # option 2.1
 def registration_product():
@@ -171,7 +187,7 @@ def delete_item(path_file, message_id):
         lt = [k for k in open(path_file)]
         print(lt[i])
 
-    except Exception:
+    except (ValueError, NameError, SyntaxError):
         print("It's not define")
     else:
         question = input("delete (y/n):")
@@ -179,7 +195,7 @@ def delete_item(path_file, message_id):
             if lt[i][1] == str(the_id):
                 # rawx tb
                 with open(path_file, "r") as f:
-                    lines = f.readlines() # it's an array
+                    lines = f.readlines()  # it's an array
 
                 with open(path_file, "w") as f:
                     for line in lines:
@@ -194,7 +210,6 @@ def delete_item(path_file, message_id):
         else:
             print("type \'y\' or \'n\'")
 
-
 # search item by id
 def search_item(path_file, the_id):
     try:
@@ -205,7 +220,7 @@ def search_item(path_file, the_id):
         else:
             e = lt[i].strip().split(' | ')
             return e
-    except Exception:
+    except (ValueError, NameError, SystemError, TypeError):
         return "This ID is not define"
 
 # create item
@@ -226,8 +241,8 @@ def create_item(path_file, list_data, type_in, recycle_in, initial_text=""):
             f.write("\n{}\n".format(time.asctime()) + list_data)
 
 # modify item by id
-def modify_item(path_file, message):
-    try :
+def modify_item(path_file, message, *args):
+    try:
         the_id = int(input(message))
         i = the_id + 1
         lt = [k for k in open(path_file)]
@@ -247,8 +262,12 @@ def modify_item(path_file, message):
                         if line.strip("\n")[1] != str(the_id):
                             f.write(line)
                         else:
-                            dl = global_regis("name: ", "surname: ", "email: ", "password: ")
-                            data_in_line = " {} | {} | {} | {} | {} \n".format(the_id, dl[0], dl[1], dl[2], dl[3])
+                            dl = global_regis(*args)
+                            data_in_line = " {} ".format(the_id)
+                            for k in dl:
+                                data_in_line += "| {} ".format(k)
+                            else:
+                                data_in_line += "\n"
                             f.write(data_in_line)
         elif question in ('n', 'N', 'no', 'not'):
             print("no changed nothing")
@@ -266,7 +285,6 @@ def count_items(path_file):
     c = len(lt)-2
     return c
 
-
 def global_regis(*args):
     dl = []
     for k in args:
@@ -277,9 +295,9 @@ def global_regis(*args):
 
 if __name__ == '__main__':
     # registration_user()
-    # yourid = int(input("type the id: "))
-    # print(search_item('.data_users.txt', yourid))
-    # delete_item(".data_users.txt", yourid)
+    # your_id = int(input("type the id: "))
+    # print(search_item('.data_users.txt', your_id))
+    # delete_item(".data_users.txt", your_id)
     # empty_users(".data_users.txt")
     menu()
     # print(time.asctime())
@@ -288,7 +306,3 @@ if __name__ == '__main__':
     # print("amount: {}".format(count_items("data_users.txt")))
 
 
-
-
-
-    
