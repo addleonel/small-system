@@ -8,8 +8,7 @@ def empty_list(path_file):
         os.remove(path_file)
 
 # delete item with id
-def delete_item(path_file, message_id, recycle_in):
-    # c = count_items(path_file)
+def delete_item(path_file, message_id, recycle_in, message_deleted):
     try:
         the_id = int(input(message_id))
         i = the_id + 1
@@ -32,8 +31,8 @@ def delete_item(path_file, message_id, recycle_in):
                             f.write(line)
                         else:
                             with open(recycle_in, "a") as m:
-                                m.write("\n{}\n".format(time.asctime()) + "deleted user\n{}".format(line))
-                            f.write("     user deleted\n")
+                                m.write("\n\033[1;33;10m{}\033[0m\n".format(time.asctime()) + "deleted user\n{}".format(line))
+                            f.write("     " + message_deleted + "\n")
 
                 print("deleted")
         elif question in ('n', 'N', 'no', 'not'):
@@ -62,14 +61,14 @@ def create_item(path_file, list_data, type_in, recycle_in, initial_text=""):
             print("registered")
         # reclycle data in
         with open(recycle_in, "a") as f:
-            f.write("\n{}\n{}\n{}".format(time.asctime(), initial_text, list_data))
+            f.write("\n\033[1;33;10m{}\033[0m\nnew list\n{}\n{}".format(time.asctime(), initial_text, list_data))
     elif type_in == "a":
         with open(path_file, "a") as f:
             f.write(list_data)
             print("registered")
         # recycle data in
         with open(recycle_in, "a") as f:
-            f.write("\n{}\n".format(time.asctime()) + list_data)
+            f.write("\n\033[1;33;10m{}\033[0m\nnew user\n".format(time.asctime()) + list_data)
 
 # modify item with id
 def modify_item(path_file, message, recycle_in, *args):
@@ -100,7 +99,7 @@ def modify_item(path_file, message, recycle_in, *args):
                             else:
                                 data_in_line += "\n"
                             with open(recycle_in, "a") as m:
-                                m.write("\n{}\n".format(time.asctime()) + "modified to:\n" + data_in_line)
+                                m.write("\n\033[1;33;10m{}\033[0m\n".format(time.asctime()) + "modified to:\n" + data_in_line)
                             f.write(data_in_line)
         elif question in ('n', 'N', 'no', 'not'):
             print("no changed nothing")
@@ -123,6 +122,6 @@ def count_items(path_file):
 def global_regis(*args):
     dl = []
     for k in args:
-        call = input(k)
+        call = input("{}: ".format(k))
         dl.append(call)
     return dl
