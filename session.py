@@ -175,17 +175,4 @@ def view_history_user(path_recycle):
 
 
 if __name__ == '__main__':
-    # registration_user()
-    # your_id = int(input("type the id: "))
-    # print(search_item('.data_users.txt', your_id))
-    # delete_item(".data_users.txt", your_id)
-    # empty_users(".data_users.txt")
-    # view_history_user(".recycle_users.txt")
     menu()
-    # print("\033[1;33;10m Bright Green  \033[0m\n"+ "hello")
-    # print(time.asctime())
-    # count_items("data_users.txt")
-    # global_regis("name: ", "surname: ", "email: ", "pass: ")
-    # print("amount: {}".format(count_items("data_users.txt")))
-
-
